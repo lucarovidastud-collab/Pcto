@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore Preventivi con Visual AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <button id="theme-toggle" class="btn-theme" type="button" aria-label="Cambia tema visivo">
+            <span class="icon-sun">☀️ Light Mode</span>
+            <span class="icon-moon" style="display:none;">🌙 Dark Mode</span>
+        </button>
+
+        <h1>Generatore di Preventivi Multimodale 🚀</h1>
+        <p>Inserisci i tuoi appunti: la nostra AI li trasformerà in una proposta commerciale persuasiva. Inserendo il sito del cliente, un browser fantasma ne scatterà una foto e clonerà automaticamente la brand identity visiva!</p>
+    </header>
+
+    <main>
+        <section id="configurazione" class="anim-fade-in">
+            <h2>1. Configurazione Progetto</h2>
+
+            <form id="form-preventivo">
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="nome-azienda">Nome dell'azienda cliente:</label>
+                        <input type="text" id="nome-azienda" name="nomeAzienda" placeholder="Es. ACME SpA" required>
+                    </div>
+
+                    <div class="form-group flex-1">
+                        <label for="link-sito">Sito Web (Consigliato per clonare il design):</label>
+                        <input type="url" id="link-sito" name="linkSito" placeholder="https://www.aziendacliente.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="caratteristiche-azienda">Contesto, obiettivi o valori del cliente (Aiuta l'AI a personalizzare il tono):</label>
+                    <textarea id="caratteristiche-azienda" name="caratteristicheAzienda" rows="2" placeholder="Es. Azienda tech innovativa. Vogliono rifare l'app per aumentare gli utenti attivi..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="textarea-header">
+                        <label for="corpo-preventivo">Appunti grezzi del Preventivo (Prezzi, servizi, idee sparse):</label>
+                        <span id="budget-counter" class="badge-budget">Budget Rilevato: <b>0 €</b></span>
+                    </div>
+                    <textarea id="corpo-preventivo" name="corpoPreventivo" rows="8" placeholder="Incolla qui i tuoi appunti. Es: Sviluppo App iOS 4500€ (2 mesi). Se vogliono anche Android sono 3000€ in più. Pagamento 50% anticipo." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Scegli il layout di impaginazione:</label>
+                    <div class="stile-options">
+                        <label><input type="radio" name="stile" value="moderno" checked> Moderno</label>
+                        <label><input type="radio" name="stile" value="minimal"> Minimal</label>
+                        <label><input type="radio" name="stile" value="corporate"> Corporate</label>
+                        <label><input type="radio" name="stile" value="creativo"> Creativo</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-genera">Genera Preventivo con Visual AI</button>
+            </form>
+        </section>
+
+        <hr>
+
+        <section id="risultato" class="anim-fade-in delay-1">
+            <div class="risultato-header">
+                <h2>2. La tua Proposta Commerciale</h2>
+                <div id="stats-preventivo" class="stats-container" style="display: none;">
+                    <span id="tempo-lettura">⏱️ Tempo di lettura: ~0 min</span>
+                    <span id="conteggio-parole">📝 0 parole</span>
+                </div>
+            </div>
+            
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Il risultato impaginato apparirà qui sotto. Usa i pulsanti per l'anteprima o scarica la cartella pronta per essere inviata al cliente.</p>
+            
+            <div class="azioni-risultato">
+                <button type="button" id="btn-anteprima">Mostra Anteprima Web</button>
+                <button type="button" id="btn-copia" disabled>📋 Copia Testo</button>
+                
+                <div class="download-wrapper">
+                    <select id="theme-download-select" aria-label="Seleziona tema per l'esportazione">
+                        <option value="light" selected>☀️ Light PDF/Web</option>
+                        <option value="dark">🌙 Dark PDF/Web</option>
+                    </select>
+                    <button type="button" id="btn-download" disabled>📥 Scarica ZIP</button>
+                </div>
+            </div>
+
+            <div class="preview-window">
+                <div class="preview-dot-bar">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div id="area-anteprima">
+                    <p>L'anteprima visiva del preventivo generato comparirà qui...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - Generatore Preventivi AI Multimodale | PCTO Project</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
