@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
+import path from 'path'; // Aggiunto per gestire i percorsi in modo sicuro
 
 dotenv.config();
 
@@ -120,7 +121,7 @@ app.post('/api/genera-preventivo', async (req, res) => {
             });
         }
 
-        console.log("🤖 Invio dei dati ottimizzati a Gemini...");
+        console.log("🤖 Invio dei dati ottimizzati a OpenRouter (Gemini)...");
         
         const openRouterResponse = await axios.post(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -128,7 +129,7 @@ app.post('/api/genera-preventivo', async (req, res) => {
                 model: "google/gemini-2.5-flash", 
                 messages: messaggiPrompt,
                 max_tokens: 2500,
-                temperature: 0.2 // Abbassata leggermente per aumentare precisione matematica e logica
+                temperature: 0.2
             },
             {
                 headers: {
@@ -137,6 +138,10 @@ app.post('/api/genera-preventivo', async (req, res) => {
                 }
             }
         );
+
+        if (!openRouterResponse.data.choices || openRouterResponse.data.choices.length === 0) {
+            throw new Error("Risposta vuota da OpenRouter. Controlla il bilancio del tuo account.");
+        }
 
         const rispostaAI = openRouterResponse.data.choices[0].message.content;
 
@@ -162,27 +167,27 @@ app.post('/api/genera-preventivo', async (req, res) => {
             if (!isNaN(cifraPura)) {
                 budgetCalcolato = cifraPura;
             }
-            // Rimuoviamo il tag dal testo del preventivo in modo che non sporchi l'HTML finale
             testoPulitoAI = testoPulitoAI.replace(/<budget_totale>[\s\S]*?<\/budget_totale>/, '').trim();
         }
 
         res.json({
             palette: paletteEstratta,
-            budgetCalcolato: budgetCalcolato, // Restituito come numero puro al client
+            budgetCalcolato: budgetCalcolato, 
             aiResponse: {
                 choices: [{ message: { content: testoPulitoAI } }]
             }
         });
 
     } catch (error) {
+        // Log dettagliato nel terminale per capire SUBITO cosa risponde OpenRouter
         console.error("❌ ERRORE DETTAGLIATO DEL SERVER:", error.response?.data || error.message);
-        res.status(500).json({ error: "Errore interno durante la generazione del preventivo." });
+        res.status(500).json({ error: error.response?.data?.error?.message || "Errore interno durante la generazione del preventivo." });
     }
 });
 
-// Forza la rotta principale a caricare la splendida pagina login.html invece di index.html
+// FIX: Usiamo path.resolve() per evitare l'errore sulla variabile __path inesistente
 app.get('/', (req, res) => {
-    res.sendFile(__path + '/login.html'); // o il percorso corretto della tua cartella public
+    res.sendFile(path.resolve('./login.html')); 
 }); 
 
 app.listen(PORT, () => {

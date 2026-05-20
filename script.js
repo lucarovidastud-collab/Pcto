@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 6. STATISTICHE PREVENTIVO E COPIA CLIPBOARD
+    // 6. STATISTICHE PREVENTIVO E COPIA CLIPBOARD (RICH TEXT FORMATTED)
     // ==========================================================================
     function analizzaStatistichePreventivo(testoHtml) {
         if (!statsContainer || !conteggioParoleSpan || !tempoLetturaSpan) return;
@@ -271,12 +271,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnCopia) {
         btnCopia.addEventListener('click', async () => {
             try {
+                // Generiamo una versione testuale pulita di fallback
                 const divTemporaneo = document.createElement('div');
                 divTemporaneo.innerHTML = testoPreventivoAI;
-                await navigator.clipboard.writeText(divTemporaneo.innerText);
+                const testoSemplice = divTemporaneo.innerText;
+
+                // Creiamo l'oggetto ClipboardItem impostando sia il testo semplice che l'HTML formattato
+                const blobHtml = new Blob([testoPreventivoAI], { type: 'text/html' });
+                const blobTesto = new Blob([testoSemplice], { type: 'text/plain' });
+
+                const data = [new ClipboardItem({
+                    'text/html': blobHtml,
+                    'text/plain': blobTesto
+                })];
+
+                // Scriviamo nella clipboard con la formattazione ricca
+                await navigator.clipboard.write(data);
                 
+                // Feedback visivo sul pulsante
                 const testoOriginale = btnCopia.innerHTML;
-                btnCopia.innerHTML = '✅ Copiato!';
+                btnCopia.innerHTML = '✅ Copiato con Formattazione!';
                 const bgOriginale = btnCopia.style.backgroundColor;
                 btnCopia.style.backgroundColor = '#10b981'; 
                 
@@ -286,8 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 2000);
                 
             } catch (err) {
-                console.error('Impossibile copiare il testo: ', err);
-                alert('Errore durante la copia del testo.');
+                console.error('Impossibile copiare il testo formattato: ', err);
+                alert('Errore durante la copia. Assicurati di dare i permessi di scrittura alla clipboard.');
             }
         });
     }
