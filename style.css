@@ -1,4 +1,4 @@
-    /* ==========================================================================
+/* ==========================================================================
         RESET, VARIABILI E BASE TEMA
     ========================================================================== */
     :root {
@@ -20,6 +20,13 @@
         --hr-color: #e2e8f0;
         --shadow-card: rgba(15, 23, 42, 0.04);
         --shadow-window: rgba(15, 23, 42, 0.08);
+
+        /* Gestione Dinamica dell'Header in Light Mode */
+        --bg-header: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        --text-header: #0f172a;
+        --text-header-muted: #475569;
+        --bg-widget: #e2e8f0;
+        --border-widget: #cbd5e1;
     }
 
     [data-theme="dark"] {
@@ -41,6 +48,13 @@
         --hr-color: #222f47;
         --shadow-card: rgba(0, 0, 0, 0.2);
         --shadow-window: rgba(0, 0, 0, 0.4);
+
+        /* Gestione Dinamica dell'Header in Dark Mode */
+        --bg-header: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --text-header: #ffffff;
+        --text-header-muted: rgba(255, 255, 255, 0.75);
+        --bg-widget: rgba(255, 255, 255, 0.08);
+        --border-widget: rgba(255, 255, 255, 0.1);
     }
 
     *, *::before, *::after {
@@ -74,24 +88,25 @@
         INTERFACCIA GENERALE E LAYOUT
     ========================================================================== */
     header {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        color: #ffffff;
+        background: var(--bg-header);
+        color: var(--text-header);
         text-align: center;
         padding: 60px 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         position: relative;
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     header h1 { font-size: 2.4rem; margin-bottom: 12px; font-weight: 800; letter-spacing: -0.5px; }
-    header p { font-size: 1.05rem; opacity: 0.75; max-width: 680px; margin: 0 auto; line-height: 1.7; }
+    header p { font-size: 1.05rem; max-width: 680px; margin: 0 auto; line-height: 1.7; }
 
     .btn-theme {
         position: absolute; top: 20px; right: 20px; padding: 8px 16px; border-radius: 20px;
-        font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08); color: #ffffff; cursor: pointer;
+        font-size: 0.85rem; font-weight: 600; border: 1px solid var(--border-input);
+        background: var(--bg-option); color: var(--text-title); cursor: pointer;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(8px);
     }
-    .btn-theme:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+    .btn-theme:hover { background: var(--bg-option-hover); transform: translateY(-1px); }
 
     section {
         background-color: var(--bg-card); padding: 40px; border-radius: 16px;
@@ -113,7 +128,7 @@
     }
     .form-group label { font-weight: 600; color: var(--text-label); font-size: 0.95rem; }
 
-    /* NUOVO WIDGET DI BUDGET */
+    /* WIDGET DI BUDGET */
     .badge-budget {
         font-size: 0.85rem; background-color: var(--bg-option); padding: 4px 12px;
         border-radius: 20px; color: var(--text-main); border: 1px solid var(--border-color);
@@ -156,7 +171,7 @@
         border-color: #3b82f6;
     }
 
-    /* FIX AUTOCOMPILAMENTO OVERRIDE (Previene i campi bianchi/gialli di Chrome) */
+    /* FIX AUTOCOMPILAMENTO OVERRIDE */
     input:-webkit-autofill,
     input:-webkit-autofill:hover, 
     input:-webkit-autofill:focus,
@@ -243,69 +258,40 @@
         WIDGET SELETTORE TEMA + DOWNLOAD INTEGRATO
     ========================================================================== */
     .azioni-risultato {
-        display: flex;
-        gap: 16px;
-        align-items: stretch;
-        flex-wrap: wrap;
-        margin-bottom: 25px;
+        display: flex; gap: 16px; align-items: stretch; flex-wrap: wrap; margin-bottom: 25px;
     }
 
     #btn-anteprima, #btn-copia, .download-wrapper {
-        flex: 1;
-        min-width: 200px;
+        flex: 1; min-width: 200px;
     }
 
     .download-wrapper {
-        display: flex;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
-        border: 1.5px solid #10b981;
+        display: flex; border-radius: 10px; overflow: hidden;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .download-wrapper:has(#btn-download:disabled) {
-        border-color: var(--border-input);
-        box-shadow: none;
+        border-color: var(--border-input); box-shadow: none;
     }
 
     #theme-download-select {
-        background-color: var(--bg-card);
-        color: var(--text-title);
-        border: none;
-        padding: 0 12px;
-        font-family: inherit;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        outline: none;
-        border-right: 1px solid var(--border-color);
+        background-color: var(--bg-card); color: var(--text-title); border: none;
+        padding: 0 12px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+        cursor: pointer; outline: none; border-right: 1px solid var(--border-color);
         transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    #theme-download-select:hover {
-        background-color: var(--bg-option);
-    }
+    #theme-download-select:hover { background-color: var(--bg-option); }
 
     #btn-download {
-        flex: 1;
-        background-color: #10b981;
-        color: #ffffff;
-        border-radius: 0;
-        padding: 14px 16px;
-        box-shadow: none;
-        width: 100%;
+        flex: 1; background-color: #10b981; color: #ffffff; border-radius: 0;
+        padding: 14px 16px; box-shadow: none; width: 100%;
     }
 
-    #btn-download:hover:not(:disabled) {
-        background-color: #059669;
-    }
+    #btn-download:hover:not(:disabled) { background-color: #059669; }
 
-    #btn-download:disabled {
-        background-color: #94a3b8;
-        opacity: 0.4;
-        cursor: not-allowed;
-    }
+    #btn-download:disabled { background-color: #94a3b8; opacity: 0.4; cursor: not-allowed; }
 
     #btn-anteprima { background-color: var(--bg-card); color: var(--text-title); border: 2px solid var(--border-input); flex: 1; min-width: 150px; }
     #btn-anteprima:hover { background-color: var(--bg-option); }

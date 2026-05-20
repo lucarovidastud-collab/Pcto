@@ -180,6 +180,11 @@ app.post('/api/genera-preventivo', async (req, res) => {
     }
 });
 
+// Forza la rotta principale a caricare la splendida pagina login.html invece di index.html
+app.get('/', (req, res) => {
+    res.sendFile(__path + '/login.html'); // o il percorso corretto della tua cartella public
+}); 
+
 app.listen(PORT, () => {
     console.log(`🚀 Server Multimodale Ottimizzato su http://localhost:${PORT}`);
 });
