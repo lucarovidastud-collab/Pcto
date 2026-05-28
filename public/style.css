@@ -1,0 +1,313 @@
+/* ==========================================================================
+        RESET, VARIABILI E BASE TEMA
+    ========================================================================== */
+    :root {
+        --bg-app: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-input: #f8fafc;
+        --bg-option: #f1f5f9;
+        --bg-option-hover: #e2e8f0;
+        --bg-preview: #ffffff;
+        --bg-window: #f1f5f9;
+        
+        --text-main: #334155;
+        --text-title: #0f172a;
+        --text-label: #1e293b;
+        --text-muted: #64748b;
+        
+        --border-color: #e2e8f0;
+        --border-input: #cbd5e1;
+        --hr-color: #e2e8f0;
+        --shadow-card: rgba(15, 23, 42, 0.04);
+        --shadow-window: rgba(15, 23, 42, 0.08);
+
+        /* Gestione Dinamica dell'Header in Light Mode */
+        --bg-header: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        --text-header: #0f172a;
+        --text-header-muted: #475569;
+        --bg-widget: #e2e8f0;
+        --border-widget: #cbd5e1;
+    }
+
+    [data-theme="dark"] {
+        --bg-app: #0b0f19;
+        --bg-card: #151f32;
+        --bg-input: #0b0f19;
+        --bg-option: #222f47;
+        --bg-option-hover: #2d3e5d;
+        --bg-preview: #1a263e;
+        --bg-window: #0b0f19;
+        
+        --text-main: #94a3b8;
+        --text-title: #f8fafc;
+        --text-label: #cbd5e1;
+        --text-muted: #64748b;
+        
+        --border-color: #222f47;
+        --border-input: #2d3e5d;
+        --hr-color: #222f47;
+        --shadow-card: rgba(0, 0, 0, 0.2);
+        --shadow-window: rgba(0, 0, 0, 0.4);
+
+        /* Gestione Dinamica dell'Header in Dark Mode */
+        --bg-header: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --text-header: #ffffff;
+        --text-header-muted: rgba(255, 255, 255, 0.75);
+        --bg-widget: rgba(255, 255, 255, 0.08);
+        --border-widget: rgba(255, 255, 255, 0.1);
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: var(--bg-app);
+        color: var(--text-main);
+        line-height: 1.6;
+        transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    main {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    hr {
+        border: 0;
+        height: 1px;
+        background: var(--hr-color);
+        margin: 40px 0;
+    }
+
+    /* ==========================================================================
+        INTERFACCIA GENERALE E LAYOUT
+    ========================================================================== */
+    header {
+        background: var(--bg-header);
+        color: var(--text-header);
+        text-align: center;
+        padding: 60px 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        position: relative;
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    header h1 { font-size: 2.4rem; margin-bottom: 12px; font-weight: 800; letter-spacing: -0.5px; }
+    header p { font-size: 1.05rem; max-width: 680px; margin: 0 auto; line-height: 1.7; }
+
+    .btn-theme {
+        position: absolute; top: 20px; right: 20px; padding: 8px 16px; border-radius: 20px;
+        font-size: 0.85rem; font-weight: 600; border: 1px solid var(--border-input);
+        background: var(--bg-option); color: var(--text-title); cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(8px);
+    }
+    .btn-theme:hover { background: var(--bg-option-hover); transform: translateY(-1px); }
+
+    section {
+        background-color: var(--bg-card); padding: 40px; border-radius: 16px;
+        box-shadow: 0 20px 40px var(--shadow-card); border: 1px solid var(--border-color);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    section h2 {
+        font-size: 1.4rem; color: var(--text-title); font-weight: 700;
+        border-left: 4px solid #3b82f6; padding-left: 12px;
+    }
+
+    .form-group { margin-bottom: 24px; }
+    .form-row { display: flex; gap: 20px; }
+    .flex-1 { flex: 1; }
+
+    .textarea-header {
+        display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+    }
+    .form-group label { font-weight: 600; color: var(--text-label); font-size: 0.95rem; }
+
+    /* WIDGET DI BUDGET */
+    .badge-budget {
+        font-size: 0.85rem; background-color: var(--bg-option); padding: 4px 12px;
+        border-radius: 20px; color: var(--text-main); border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+    .badge-budget.attivo { background-color: #10b98115; color: #10b981; border-color: #10b98140; }
+
+    /* ==========================================================================
+        INPUT, TEXTAREA E FIX AUTOFILL
+    ========================================================================== */
+    input[type="text"], input[type="url"], textarea, select {
+        width: 100%; padding: 14px 16px; border: 1.5px solid var(--border-input);
+        border-radius: 10px; font-family: inherit; font-size: 1rem; color: var(--text-main);
+        background-color: var(--bg-input); transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        outline: none; 
+        border-color: #3b82f6; 
+        background-color: var(--bg-card);
+        color: var(--text-title);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Sincronizzazione colori a riposo e sotto focus in Dark Mode */
+    [data-theme="dark"] input[type="text"], 
+    [data-theme="dark"] input[type="url"], 
+    [data-theme="dark"] textarea,
+    [data-theme="dark"] select {
+        background-color: var(--bg-input);
+        color: var(--text-title);
+        border-color: var(--border-input);
+    }
+
+    [data-theme="dark"] input:focus, 
+    [data-theme="dark"] textarea:focus,
+    [data-theme="dark"] select:focus {
+        background-color: var(--bg-card);
+        color: var(--text-title);
+        border-color: #3b82f6;
+    }
+
+    /* FIX AUTOCOMPILAMENTO OVERRIDE */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--text-main) !important;
+        transition: background-color 9999s ease-in-out 0s;
+        box-shadow: inset 0 0 0 1000px var(--bg-input) !important;
+    }
+
+    [data-theme="dark"] input:-webkit-autofill,
+    [data-theme="dark"] input:-webkit-autofill:hover, 
+    [data-theme="dark"] input:-webkit-autofill:focus,
+    [data-theme="dark"] textarea:-webkit-autofill,
+    [data-theme="dark"] textarea:-webkit-autofill:hover,
+    [data-theme="dark"] textarea:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--text-title) !important;
+        transition: background-color 9999s ease-in-out 0s;
+        box-shadow: inset 0 0 0 1000px var(--bg-input) !important;
+    }
+
+    /* ==========================================================================
+        OPZIONI DI STILE (RADIO BUTTONS)
+    ========================================================================== */
+    .stile-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 8px; }
+    .stile-options label {
+        display: block; background-color: var(--bg-option); border: 1.5px solid var(--border-color);
+        padding: 14px; text-align: center; border-radius: 10px; cursor: pointer;
+        font-weight: 600; color: var(--text-main); transition: all 0.2s ease;
+    }
+    .stile-options label:hover { background-color: var(--bg-option-hover); transform: translateY(-1px); }
+    .stile-options input[type="radio"] { margin-right: 6px; accent-color: #3b82f6; }
+    .stile-options label:has(input:checked) { background-color: #3b82f610; border-color: #3b82f6; color: #3b82f6; }
+    [data-theme="dark"] .stile-options label:has(input:checked) { background-color: #3b82f620; color: #f8fafc; }
+
+    /* ==========================================================================
+        PULSANTI
+    ========================================================================== */
+    button {
+        font-family: inherit; font-size: 0.95rem; font-weight: 600; padding: 14px 24px;
+        border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    button:active { transform: scale(0.97); }
+
+    #btn-genera { width: 100%; background-color: #3b82f6; color: #ffffff; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
+    #btn-genera:hover { background-color: #2563eb; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25); }
+    #btn-genera:disabled { background-color: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .risultato-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    .stats-container { display: flex; gap: 12px; font-size: 0.85rem; background: var(--bg-option); padding: 6px 14px; border-radius: 30px; border: 1px solid var(--border-color); color: var(--text-main); }
+
+    /* ==========================================================================
+        FINESTRA ANTEPRIMA DIGITALE DECORATA
+    ========================================================================== */
+    .preview-window {
+        background-color: var(--bg-window); border: 1px solid var(--border-color);
+        border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px var(--shadow-window);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 15px;
+    }
+    .preview-dot-bar { padding: 12px 16px; display: flex; gap: 6px; background-color: var(--bg-window); border-bottom: 1px solid var(--border-color); }
+    .preview-dot-bar .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .preview-dot-bar .dot.red { background-color: #ef4444; }
+    .preview-dot-bar .dot.yellow { background-color: #f59e0b; }
+    .preview-dot-bar .dot.green { background-color: #10b981; }
+
+    #area-anteprima {
+        background-color: var(--bg-preview); padding: 40px; text-align: left;
+        color: var(--text-main); min-height: 200px; transition: background-color 0.4s ease;
+    }
+    #area-anteprima > p { text-align: center; font-style: italic; color: var(--text-muted); margin-top: 40px; }
+
+    footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem; margin-top: 60px; }
+
+    /* ==========================================================================
+        ANIMAZIONI
+    ========================================================================== */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    .anim-fade-in { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    .delay-1 { animation-delay: 0.15s; }
+
+    /* ==========================================================================
+        WIDGET SELETTORE TEMA + DOWNLOAD INTEGRATO
+    ========================================================================== */
+    .azioni-risultato {
+        display: flex; gap: 16px; align-items: stretch; flex-wrap: wrap; margin-bottom: 25px;
+    }
+
+    #btn-anteprima, #btn-copia, .download-wrapper {
+        flex: 1; min-width: 200px;
+    }
+
+    .download-wrapper {
+        display: flex; border-radius: 10px; overflow: hidden;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .download-wrapper:has(#btn-download:disabled) {
+        border-color: var(--border-input); box-shadow: none;
+    }
+
+    #theme-download-select {
+        background-color: var(--bg-card); color: var(--text-title); border: none;
+        padding: 0 12px; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+        cursor: pointer; outline: none; border-right: 1px solid var(--border-color);
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    #theme-download-select:hover { background-color: var(--bg-option); }
+
+    #btn-download {
+        flex: 1; background-color: #10b981; color: #ffffff; border-radius: 0;
+        padding: 14px 16px; box-shadow: none; width: 100%;
+    }
+
+    #btn-download:hover:not(:disabled) { background-color: #059669; }
+
+    #btn-download:disabled { background-color: #94a3b8; opacity: 0.4; cursor: not-allowed; }
+
+    #btn-anteprima { background-color: var(--bg-card); color: var(--text-title); border: 2px solid var(--border-input); flex: 1; min-width: 150px; }
+    #btn-anteprima:hover { background-color: var(--bg-option); }
+
+    #btn-copia { background-color: #8b5cf6; color: #ffffff; flex: 1; min-width: 150px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15); }
+    #btn-copia:hover { background-color: #7c3aed; box-shadow: 0 6px 18px rgba(139, 92, 246, 0.25); }
+    #btn-copia:disabled { background-color: #94a3b8; opacity: 0.4; cursor: not-allowed; box-shadow: none; transform: none; }
+
+    /* ==========================================================================
+        RESPONSIVE
+    ========================================================================== */
+    @media (max-width: 680px) {
+        .form-row { flex-direction: column; gap: 0; }
+        main { padding: 0 10px; }
+        .azioni-risultato { flex-direction: column; }
+        #btn-anteprima, #btn-copia, .download-wrapper { width: 100%; flex: none; }
+        .btn-theme { position: static; margin: 15px auto 0 auto; display: inline-block; }
+        .risultato-header { flex-direction: column; align-items: flex-start; }
+    }

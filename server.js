@@ -3,16 +3,22 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
-import path from 'path'; // Aggiunto per gestire i percorsi in modo sicuro
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' })); 
-app.use(express.static('.')); 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const publicDir = path.join(__dirname, 'public');
 
-const PORT = 3000;
+app.use(express.static(__dirname));
+app.use(express.static(publicDir));
+
+const PORT = process.env.PORT || 3000;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 // FUNZIONE DI SCRAPING OTTIMIZZATA E LEGGERA
@@ -22,10 +28,25 @@ async function scattaScreenshotSito(url) {
     
     let browser;
     try {
-        browser = await puppeteer.launch({
-            headless: "new",
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
+        if (process.env.VERCEL) {
+            // Runtime Chromium compatibile con serverless Vercel.
+            const [{ default: chromium }, { default: puppeteerCore }] = await Promise.all([
+                import('@sparticuz/chromium'),
+                import('puppeteer-core')
+            ]);
+
+            browser = await puppeteerCore.launch({
+                args: chromium.args,
+                defaultViewport: { width: 1024, height: 768 },
+                executablePath: await chromium.executablePath(),
+                headless: chromium.headless
+            });
+        } else {
+            browser = await puppeteer.launch({
+                headless: "new",
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
+        }
         
         const page = await browser.newPage();
         await page.setViewport({ width: 1024, height: 768 });
@@ -185,11 +206,22 @@ app.post('/api/genera-preventivo', async (req, res) => {
     }
 });
 
-// FIX: Usiamo path.resolve() per evitare l'errore sulla variabile __path inesistente
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('./login.html')); 
-}); 
-
-app.listen(PORT, () => {
-    console.log(`🚀 Server Multimodale Ottimizzato su http://localhost:${PORT}`);
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.get('/app', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`🚀 Server Multimodale Ottimizzato su http://localhost:${PORT}`);
+    });
+}
+
+export default app;

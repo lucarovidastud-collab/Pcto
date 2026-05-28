@@ -7,13 +7,15 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@sparticuz/chromium": "^149.0.0",
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "firebase": "^12.13.0",
-    "puppeteer": "^24.43.1"
+    "puppeteer": "^24.43.1",
+    "puppeteer-core": "^25.1.0"
   },
   "overrides": {
     "undici": "^5.28.4"
